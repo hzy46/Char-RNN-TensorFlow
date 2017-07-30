@@ -2,7 +2,7 @@
 
 Multi-language Char RNN in TensorFlow. You can use this code to generate English text, Chinese poetries and lyrics, Japanese text and text in other language.
 
-一个基于最新版本TensorFlow的Char RNN实现。可以实现生成英文、写诗和歌词、生成代码、生成日文等功能。
+一个基于最新版本TensorFlow的Char RNN实现。可以实现生成英文、写诗、歌词、小说、生成代码、生成日文等功能。
 
 
 ## Requirements
@@ -86,6 +86,48 @@ Result:
 何当不相见，何处见江边。
 一叶生云里，春风出竹堂。
 何时有相访，不得在君心。
+```
+
+## Generate Chinese Novels
+
+To train (The file "novel.txt" is not included in this repo. You should find one and make sure it is utf-8 encoded!):
+```
+python train.py \
+  --use_embedding True \
+  --input_file data/novel.txt \
+  --num_steps 80 \
+  --name novel \
+  --learning_rate 0.005 \
+  --num_seqs 32 \
+  --num_layers 3 \
+  --embedding_size 256 \
+  --lstm_size 256 \
+  --max_steps 1000000
+```
+
+To sample:
+```
+python sample.py \
+  --converter_path model/dpcq/converter.pkl \
+  --checkpoint_path  model/novel \
+  --use_embedding \
+  --max_length 2000 \
+  --num_layers 3 \
+  --lstm_size 256 \
+  --embedding_size 256
+```
+
+Result:
+```
+闻言，萧炎一怔，旋即目光转向一旁的那名灰袍青年，然后目光在那位老者身上扫过，那里，一个巨大的石台上，有着一个巨大的巨坑，一些黑色光柱，正在从中，一道巨大的黑色巨蟒，一股极度恐怖的气息，从天空上暴射而出 ，然后在其中一些一道道目光中，闪电般的出现在了那些人影，在那种灵魂之中，却是有着许些强者的感觉，在他们面前，那一道道身影，却是如同一道黑影一般，在那一道道目光中，在这片天地间，在那巨大的空间中，弥漫而开……
+
+“这是一位斗尊阶别，不过不管你，也不可能会出手，那些家伙，可以为了这里，这里也是能够有着一些异常，而且他，也是不能将其他人给你的灵魂，所以，这些事，我也是不可能将这一个人的强者给吞天蟒，这般一次，我们的实力，便是能够将之击杀……”
+
+“这里的人，也是能够与魂殿强者抗衡。”
+
+萧炎眼眸中也是掠过一抹惊骇，旋即一笑，旋即一声冷喝，身后那些魂殿殿主便是对于萧炎，一道冷喝的身体，在天空之上暴射而出，一股恐怖的劲气，便是从天空倾洒而下。
+
+“嗤！”
 ```
 
 ## Generate Chinese Lyrics
