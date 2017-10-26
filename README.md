@@ -108,7 +108,7 @@ python train.py \
 To sample:
 ```
 python sample.py \
-  --converter_path model/dpcq/converter.pkl \
+  --converter_path model/novel/converter.pkl \
   --checkpoint_path  model/novel \
   --use_embedding \
   --max_length 2000 \
