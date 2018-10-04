@@ -101,7 +101,9 @@ class CharRNN:
         self.optimizer = train_op.apply_gradients(zip(grads, tvars))
 
     def train(self, batch_generator, max_steps, save_path, save_every_n, log_every_n):
-        self.session = tf.Session()
+        config = tf.ConfigProto()
+        config.gpu_options.allow_growth = True
+        self.session = tf.Session(config=config)
         with self.session as sess:
             sess.run(tf.global_variables_initializer())
             # Train network
