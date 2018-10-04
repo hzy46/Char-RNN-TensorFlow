@@ -101,6 +101,7 @@ class CharRNN:
         self.optimizer = train_op.apply_gradients(zip(grads, tvars))
 
     def train(self, batch_generator, max_steps, save_path, save_every_n, log_every_n):
+        # 设置TF动态调整占用GPU内存大小，用多少占用多少，可以跑多个学习
         config = tf.ConfigProto()
         config.gpu_options.allow_growth = True
         self.session = tf.Session(config=config)
