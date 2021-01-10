@@ -3,7 +3,7 @@
 Multi-language Char RNN in TensorFlow. You can use this code to generate English text, Chinese poetries and lyrics, Japanese text and text in other language.
 
 一个基于最新版本TensorFlow的Char RNN实现。可以实现生成英文、写诗、歌词、小说、生成代码、生成日文等功能。
-LZY 在 HYZ 的基础上做了一些微小的改动来让此支持断点继续训练。
+LZY 在 HYZ 的基础上做了一些微小的改动来让此支持断点继续训练和Tensorflow 2.0。
 
 
 ## Requirements 环境要求
