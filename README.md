@@ -4,11 +4,12 @@ Multi-language Char RNN in TensorFlow. You can use this code to generate English
 
 一个基于最新版本TensorFlow的Char RNN实现。可以实现生成英文、写诗、歌词、小说、生成代码、生成日文等功能。
 LZY 在 HYZ 的基础上做了一些微小的改动来让此支持断点继续训练和Tensorflow 2.0。
+增加了predict.py。
 
 
 ## Requirements 环境要求
-- Python 2.7.X
-- TensorFlow >= 1.2
+- Python 2.7.X 支持 Python 3.X
+- TensorFlow >= 1.2 支持 TensorFlow 2.X
 
 ## How to use predict.py 预测字符的方法
 for example 例如：
