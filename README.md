@@ -10,6 +10,17 @@ LZY 在 HYZ 的基础上做了一些微小的改动来让此支持断点继续�
 - Python 2.7.X
 - TensorFlow >= 1.2
 
+## How to use predict.py 预测字符的方法
+for example: 例如：
+```
+python predict.py \
+  --converter_path model/shakespeare/converter.pkl \
+  --checkpoint_path model/shakespeare/ \
+  --max_length 1000
+```
+使用和 sample.py 同样的参数。
+Use the same parameters as sample.py.
+
 ## Generate English Text 生成英文
 
 To train:

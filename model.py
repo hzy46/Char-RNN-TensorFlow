@@ -176,3 +176,68 @@ class CharRNN:
         self.saver.restore(self.session, checkpoint)
         print('Restored from: {}'.format(checkpoint))
         self.restored = True
+
+    def predict(self, n_samples, prime, vocab_size, depth=5):
+        samples = [c for c in prime]
+        sess = self.session
+        new_state = sess.run(self.initial_state)
+        preds = np.ones((vocab_size, ))  # for prime=[]
+        for c in prime:
+            x = np.zeros((1, 1))
+            # 输入单个字符
+            x[0, 0] = c
+            feed = {self.inputs: x,
+                    self.keep_prob: 1.,
+                    self.initial_state: new_state}
+            preds, new_state = sess.run([self.proba_prediction, self.final_state],
+                                        feed_dict=feed)
+
+        c = pick_top_n(preds, vocab_size)
+        # 添加字符到samples中
+        samples.append(c)
+
+        # 不断生成字符，直到达到指定数目
+        x = np.zeros((1, 1))
+        x[0, 0] = c
+        feed = {self.inputs: x,
+                self.keep_prob: 1.,
+                self.initial_state: new_state}
+        preds, new_state = sess.run([self.proba_prediction, self.final_state],
+                                    feed_dict=feed)
+        
+        p = preds.copy()
+        p = p.reshape([p.shape[1]])
+        c = np.argsort(-p)[:5]
+        p.sort()
+        p = p[::-1][:5]
+        p = p / np.sum(p)
+        top = [c, p]
+
+        result = []
+        for i in range(5):
+            c = top[0][i]
+            p = top[1][i]
+
+            x = np.zeros((1, 1))
+            x[0, 0] = c
+            feed = {self.inputs: x,
+                    self.keep_prob: 1.,
+                    self.initial_state: new_state}
+            preds, new_state = sess.run([self.proba_prediction, self.final_state],
+                                        feed_dict=feed)
+
+            generated = [c, ]
+            for i in range(depth):
+                x = np.zeros((1, 1))
+                x[0, 0] = c
+                feed = {self.inputs: x,
+                        self.keep_prob: 1.,
+                        self.initial_state: new_state}
+                preds, new_state = sess.run([self.proba_prediction, self.final_state],
+                                            feed_dict=feed)
+
+                c = pick_top_n(preds, vocab_size, 1)
+                generated.append(c)
+            result.append([generated, p])
+
+        return result

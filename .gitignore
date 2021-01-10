@@ -110,3 +110,6 @@ data/Bilibili.txt
 data/TheThreeBodyProblem.txt
 data/WangZengQi.txt
 data/ZhaoHuaXiShi.txt
+
+# vscode
+.vscode/
