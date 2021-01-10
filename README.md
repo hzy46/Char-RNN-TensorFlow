@@ -11,15 +11,25 @@ LZY 在 HYZ 的基础上做了一些微小的改动来让此支持断点继续�
 - TensorFlow >= 1.2
 
 ## How to use predict.py 预测字符的方法
-for example: 例如：
+for example 例如：
 ```
 python predict.py \
-  --converter_path model/shakespeare/converter.pkl \
-  --checkpoint_path model/shakespeare/ \
-  --max_length 1000
+  --converter_path model/torch_gen/converter.pkl \
+  --checkpoint_path  model/torch_gen \
+  --max_length 1500 \
+  --start_string "    raise "
 ```
 使用和 sample.py 同样的参数。
 Use the same parameters as sample.py.
+
+result 结果:
+```
+    raise  ->  utized_inpu   probability: 0.6539345979690552
+    raise  -> es()\r\n       probability: 0.1654084473848343
+    raise  ->  pistent_and   probability: 0.07784435153007507
+    raise  ->  al_module_t   probability: 0.0615621916949749
+    raise  ->  Porgex(self   probability: 0.04125040024518967
+```
 
 ## Generate English Text 生成英文
 
