@@ -1,6 +1,7 @@
 # coding: utf-8
 from __future__ import print_function
-import tensorflow as tf
+import tensorflow.compat.v1 as tf
+tf.disable_v2_behavior()
 import numpy as np
 import time
 import os
@@ -23,7 +24,7 @@ class CharRNN:
             num_seqs, num_steps = 1, 1
         else:
             num_seqs, num_steps = num_seqs, num_steps
-
+        self.step = 0
         self.num_classes = num_classes
         self.num_seqs = num_seqs
         self.num_steps = num_steps
@@ -41,6 +42,12 @@ class CharRNN:
         self.build_loss()
         self.build_optimizer()
         self.saver = tf.train.Saver()
+
+        config = tf.ConfigProto()
+        config.gpu_options.allow_growth = True
+        self.session = tf.Session(config=config)
+
+        self.restored = False
 
     def build_inputs(self):
         with tf.name_scope('inputs'):
@@ -101,14 +108,13 @@ class CharRNN:
         self.optimizer = train_op.apply_gradients(zip(grads, tvars))
 
     def train(self, batch_generator, max_steps, save_path, save_every_n, log_every_n):
-        self.session = tf.Session()
         with self.session as sess:
-            sess.run(tf.global_variables_initializer())
+            if not self.restored:
+                sess.run(tf.global_variables_initializer())
             # Train network
-            step = 0
             new_state = sess.run(self.initial_state)
             for x, y in batch_generator:
-                step += 1
+                self.step += 1
                 start = time.time()
                 feed = {self.inputs: x,
                         self.targets: y,
@@ -121,15 +127,15 @@ class CharRNN:
 
                 end = time.time()
                 # control the print lines
-                if step % log_every_n == 0:
-                    print('step: {}/{}... '.format(step, max_steps),
+                if self.step % log_every_n == 0:
+                    print('step: {}/{}... '.format(self.step, max_steps),
                           'loss: {:.4f}... '.format(batch_loss),
                           '{:.4f} sec/batch'.format((end - start)))
-                if (step % save_every_n == 0):
-                    self.saver.save(sess, os.path.join(save_path, 'model'), global_step=step)
-                if step >= max_steps:
+                if (self.step % save_every_n == 0):
+                    self.saver.save(sess, os.path.join(save_path, 'model'), global_step=self.step)
+                if self.step >= max_steps:
                     break
-            self.saver.save(sess, os.path.join(save_path, 'model'), global_step=step)
+            self.saver.save(sess, os.path.join(save_path, 'model'), global_step=self.step)
 
     def sample(self, n_samples, prime, vocab_size):
         samples = [c for c in prime]
@@ -169,3 +175,4 @@ class CharRNN:
         self.session = tf.Session()
         self.saver.restore(self.session, checkpoint)
         print('Restored from: {}'.format(checkpoint))
+        self.restored = True

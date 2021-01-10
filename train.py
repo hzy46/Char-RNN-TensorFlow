@@ -1,4 +1,5 @@
-import tensorflow as tf
+import tensorflow.compat.v1 as tf
+tf.disable_v2_behavior()
 from read_utils import TextConverter, batch_generator
 from model import CharRNN
 import os
@@ -24,8 +25,12 @@ tf.flags.DEFINE_integer('max_vocab', 3500, 'max char number')
 
 def main(_):
     model_path = os.path.join('model', FLAGS.name)
+    print(model_path)
     if os.path.exists(model_path) is False:
         os.makedirs(model_path)
+        path_exist = False
+    else:
+        path_exist = True
     with codecs.open(FLAGS.input_file, encoding='utf-8') as f:
         text = f.read()
     converter = TextConverter(text, FLAGS.max_vocab)
@@ -44,6 +49,19 @@ def main(_):
                     use_embedding=FLAGS.use_embedding,
                     embedding_size=FLAGS.embedding_size
                     )
+    model_file_path = tf.train.latest_checkpoint(model_path)
+    if path_exist:
+        model.load(model_file_path)
+        indexes = []
+        for dirpath, dirnames, filenames in os.walk(model_path):
+            for name in filenames:
+                filepath = os.path.join(dirpath, name)
+                if filepath.endswith(".index"):
+                    indexes.append(int(name[6:-6]))
+        indexes.sort()
+        last_index = indexes[-1]
+        model.step = last_index
+
     model.train(g,
                 FLAGS.max_steps,
                 model_path,
