@@ -145,6 +145,7 @@ class CharRNN:
         for c in prime:
             x = np.zeros((1, 1))
             # 输入单个字符
+            # nai+v=e
             x[0, 0] = c
             feed = {self.inputs: x,
                     self.keep_prob: 1.,
@@ -192,21 +193,10 @@ class CharRNN:
             preds, new_state = sess.run([self.proba_prediction, self.final_state],
                                         feed_dict=feed)
 
-        c = pick_top_n(preds, vocab_size)
-
-        samples.append(c)
-
-        x = np.zeros((1, 1))
-        x[0, 0] = c
-        feed = {self.inputs: x,
-                self.keep_prob: 1.,
-                self.initial_state: new_state}
-        preds, new_state = sess.run([self.proba_prediction, self.final_state],
-                                    feed_dict=feed)
-        
+        # state: naiv
         p = preds.copy()
         p = p.reshape([p.shape[1]])
-        c = np.argsort(-p)[:5]
+        c = np.argsort(-p)[:5] # e ...
         p.sort()
         p = p[::-1][:5]
         p = p / np.sum(p)
@@ -214,18 +204,13 @@ class CharRNN:
 
         result = []
         for i in range(5):
-            c = top[0][i]
-            p = top[1][i]
-
-            x = np.zeros((1, 1))
-            x[0, 0] = c
-            feed = {self.inputs: x,
-                    self.keep_prob: 1.,
-                    self.initial_state: new_state}
-            preds, new_state = sess.run([self.proba_prediction, self.final_state],
-                                        feed_dict=feed)
+            c = top[0][i]  # e
+            p = top[1][i]  # naiv
+            
+            # pred:e state:naiv
 
             generated = [c, ]
+            # generated:[e,]
             for i in range(depth):
                 x = np.zeros((1, 1))
                 x[0, 0] = c
