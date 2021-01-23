@@ -193,10 +193,9 @@ class CharRNN:
                                         feed_dict=feed)
 
         c = pick_top_n(preds, vocab_size)
-        # 添加字符到samples中
+
         samples.append(c)
 
-        # 不断生成字符，直到达到指定数目
         x = np.zeros((1, 1))
         x[0, 0] = c
         feed = {self.inputs: x,
