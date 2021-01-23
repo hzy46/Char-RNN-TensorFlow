@@ -1,0 +1,11 @@
+python train.py ^
+  --use_embedding True ^
+  --input_file data/TheThreeBodyProblem.txt ^
+  --num_steps 80 ^
+  --name novel ^
+  --learning_rate 0.005 ^
+  --num_seqs 32 ^
+  --num_layers 3 ^
+  --embedding_size 256 ^
+  --lstm_size 256 ^
+  --max_steps 10000
