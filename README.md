@@ -3,13 +3,36 @@
 Multi-language Char RNN in TensorFlow. You can use this code to generate English text, Chinese poetries and lyrics, Japanese text and text in other language.
 
 一个基于最新版本TensorFlow的Char RNN实现。可以实现生成英文、写诗、歌词、小说、生成代码、生成日文等功能。
+LZY 在 HYZ 的基础上做了一些微小的改动来让此支持断点继续训练和Tensorflow 2.0。
+增加了predict.py。
 
 
-## Requirements
-- Python 2.7.X
-- TensorFlow >= 1.2
+## Requirements 环境要求
+- Python 2.7.X 支持 Python 3.X
+- TensorFlow >= 1.2 支持 TensorFlow 2.X
 
-## Generate English Text
+## How to use predict.py 预测字符的方法
+for example 例如：
+```
+python predict.py \
+  --converter_path model/torch_gen/converter.pkl \
+  --checkpoint_path  model/torch_gen \
+  --max_length 1500 \
+  --start_string "    raise "
+```
+使用和 sample.py 同样的参数。
+Use the same parameters as sample.py.
+
+result 结果:
+```
+    raise  ->  utized_inpu   probability: 0.6539345979690552
+    raise  -> es()\r\n       probability: 0.1654084473848343
+    raise  ->  pistent_and   probability: 0.07784435153007507
+    raise  ->  al_module_t   probability: 0.0615621916949749
+    raise  ->  Porgex(self   probability: 0.04125040024518967
+```
+
+## Generate English Text 生成英文
 
 To train:
 
@@ -52,7 +75,7 @@ I the camples.
 
 ```
 
-## Generate Chinese Poetries
+## Generate Chinese Poetries 生成中文诗
 
 To train:
 
@@ -88,7 +111,7 @@ Result:
 何时有相访，不得在君心。
 ```
 
-## Generate Chinese Novels
+## Generate Chinese Novels 生成中文小说
 
 To train (The file "novel.txt" is not included in this repo. You should find one and make sure it is utf-8 encoded!):
 ```
@@ -130,7 +153,7 @@ Result:
 “嗤！”
 ```
 
-## Generate Chinese Lyrics
+## Generate Chinese Lyrics 生成中文歌词
 
 To train:
 
@@ -172,7 +195,7 @@ Result:
 我们 你的我 你不会再会爱不到
 ```
 
-## Generate Linux Code
+## Generate Linux Code 生成 Linux 代码
 
 To train:
 
@@ -224,7 +247,7 @@ int print_init(struct priority *rt)
 }
 ```
 
-## Generate Japanese Text
+## Generate Japanese Text 生成日文
 
 To train:
 ```
